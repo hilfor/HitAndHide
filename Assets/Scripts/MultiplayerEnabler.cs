@@ -3,7 +3,7 @@
 using Photon;
 using System.Collections;
 
-public class PlayerMultiplayerEnabler :  Photon.MonoBehaviour{
+public class MultiplayerEnabler :  Photon.MonoBehaviour{
 
     public Component[] enableOnLocal;
 

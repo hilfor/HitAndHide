@@ -88,7 +88,7 @@ public class MultiplayerGameController : Photon.PunBehaviour
         GameObject player = PhotonNetwork.Instantiate(localPlayerPrefab.name, spawnLocation, Quaternion.identity, 0);
 
         player.GetComponent<PlayerMonitor>().SetPlayerSide(playerSide);
-
+        standbyCamera.SetActive(false);
     }
 
     Vector3 getSpawnlocation()
