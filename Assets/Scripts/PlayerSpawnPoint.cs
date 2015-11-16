@@ -7,6 +7,5 @@ public class PlayerSpawnPoint : MonoBehaviour {
 	public float maxSpawnRadius;
 
 	public int maxPlayersNearSpawn;
-	
 
 }

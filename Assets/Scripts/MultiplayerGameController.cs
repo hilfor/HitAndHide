@@ -1,22 +1,102 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class MultiplayerGameController : MonoBehaviour {
+public class MultiplayerGameController : Photon.PunBehaviour
+{
 
-	public GameObject standbyCamera;
+    public GameObject standbyCamera;
 
-	public GameObject[] availableSpawnPoints;
+    public GameObject[] availableSpawnPoints;
 
-	private PlayerSpawnPoint[] spawnPoints;
+    public string gameVersion;
+
+    public Text photonConnectionState;
+
+    public GameObject localPlayerPrefab;
+
+    [Range(0.0f, 1.0f)]
+    public float redBlueRatio;
+
+    private PlayerSpawnPoint[] spawnPoints;
 
 
-	void Start(){
-		spawnPoints = new PlayerSpawnPoint[availableSpawnPoints.Length];
-		for (int spawnPointIndex = 0 ; spawnPointIndex< availableSpawnPoints.Length; spawnPointIndex++){
-			spawnPoints[spawnPointIndex] = availableSpawnPoints[spawnPointIndex].GetComponent<PlayerSpawnPoint>();
-		}
-	}
+    void Start()
+    {
+        spawnPoints = new PlayerSpawnPoint[availableSpawnPoints.Length];
+        for (int spawnPointIndex = 0; spawnPointIndex < availableSpawnPoints.Length; spawnPointIndex++)
+        {
+            spawnPoints[spawnPointIndex] = availableSpawnPoints[spawnPointIndex].GetComponent<PlayerSpawnPoint>();
+        }
+        PhotonNetwork.offlineMode = true;
+        PhotonNetwork.autoJoinLobby = true;
 
-	void Update(){}
-		
+        PhotonNetwork.ConnectUsingSettings("0.1");
+    }
+
+    void OnGUI()
+    {
+        photonConnectionState.text = PhotonNetwork.connectionStateDetailed.ToString();
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        base.OnConnectedToMaster();
+        if (PhotonNetwork.offlineMode)
+        {
+            OnJoinedLobby();
+        }
+        else
+        {
+
+            PhotonNetwork.JoinLobby();
+        }
+    }
+
+    public override void OnJoinedLobby()
+    {
+        base.OnJoinedLobby();
+        Debug.Log("Joined a lobby");
+        RoomOptions roomOptions = new RoomOptions();
+
+        PhotonNetwork.JoinOrCreateRoom("test", roomOptions, TypedLobby.Default);
+
+    }
+
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        Debug.Log("Joined room");
+        SpawnPlayer();
+    }
+
+    private void SpawnPlayer()
+    {
+        float randomside = Random.value;
+        PlayerSide playerSide;
+
+        if (randomside < redBlueRatio)
+        {
+            playerSide = PlayerSide.RED;
+        }
+        else
+        {
+            playerSide = PlayerSide.BLUE;
+        }
+
+        Vector3 spawnLocation = getSpawnlocation();
+        GameObject player = PhotonNetwork.Instantiate(localPlayerPrefab.name, spawnLocation, Quaternion.identity, 0);
+
+        player.GetComponent<PlayerMonitor>().SetPlayerSide(playerSide);
+
+    }
+
+    Vector3 getSpawnlocation()
+    {
+        int randomSpawnIndex = Mathf.FloorToInt(Random.Range(0f, spawnPoints.Length));
+        return spawnPoints[randomSpawnIndex].transform.position;
+    }
+
+    void Update() { }
+
 }

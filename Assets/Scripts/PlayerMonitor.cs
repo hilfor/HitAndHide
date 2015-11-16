@@ -10,9 +10,6 @@ public enum PlayerSide
 public class PlayerMonitor : MonoBehaviour
 {
 
-
-
-
     public PlayerSide playerSide;
     public GameObject[] changeableUiObjects;
 
