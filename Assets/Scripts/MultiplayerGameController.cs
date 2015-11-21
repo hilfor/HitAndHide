@@ -20,7 +20,6 @@ public class MultiplayerGameController : Photon.PunBehaviour
 
     private PlayerSpawnPoint[] spawnPoints;
 
-
     void Start()
     {
         spawnPoints = new PlayerSpawnPoint[availableSpawnPoints.Length];
@@ -83,18 +82,27 @@ public class MultiplayerGameController : Photon.PunBehaviour
         {
             playerSide = PlayerSide.BLUE;
         }
+        Debug.Log("The players side is " + playerSide);
 
-        Vector3 spawnLocation = getSpawnlocation();
+        Vector3 spawnLocation = getSpawnlocation(playerSide);
         GameObject player = PhotonNetwork.Instantiate(localPlayerPrefab.name, spawnLocation, Quaternion.identity, 0);
 
         player.GetComponent<PlayerMonitor>().SetPlayerSide(playerSide);
         standbyCamera.SetActive(false);
     }
 
-    Vector3 getSpawnlocation()
+    Vector3 getSpawnlocation(PlayerSide playerSide)
     {
-        int randomSpawnIndex = Mathf.FloorToInt(Random.Range(0f, spawnPoints.Length));
-        return spawnPoints[randomSpawnIndex].transform.position;
+        ArrayList playersSideSpawnPoints = new ArrayList();
+        foreach (PlayerSpawnPoint spawnPoint in spawnPoints)
+        {
+            if (spawnPoint.spawnSide == playerSide)
+            {
+                playersSideSpawnPoints.Add(spawnPoint);
+            }
+        }
+        int randomSpawnIndex = Mathf.FloorToInt(Random.Range(0f, playersSideSpawnPoints.Count- 1));
+        return ((PlayerSpawnPoint)playersSideSpawnPoints[randomSpawnIndex]).transform.position;
     }
 
     void Update() { }

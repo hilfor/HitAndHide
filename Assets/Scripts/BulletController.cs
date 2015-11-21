@@ -5,24 +5,25 @@ public class BulletController : MonoBehaviour
 {
 
     public GameObject explodeParticles;
+    public float projectileSpeed = 10f;
+    public float reloadTime = 1f;
 
 
-    // Use this for initialization
+    private Rigidbody localRigidBody;
+
+
     void Start()
     {
+        localRigidBody = gameObject.GetComponent<Rigidbody>();
+        localRigidBody.velocity = transform.forward * projectileSpeed;
+        //localRigidBody.AddForce(transform.forward * projectileSpeed, ForceMode.Impulse);
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        Destroy(gameObject, 10f);
     }
 
     void OnCollisionEnter(Collision collision)
     {
         string collisionTag = collision.collider.tag;
-        Rigidbody localRigidBody = GetComponent<Rigidbody>();
 
         if (collisionTag.Equals("Player") || collisionTag.Equals("Ground"))
         {

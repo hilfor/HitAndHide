@@ -9,4 +9,5 @@ public class PlayerSpawnPoint : MonoBehaviour {
     
 	public int maxPlayersNearSpawn;
 
+    public PlayerSide spawnSide;
 }
