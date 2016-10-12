@@ -7,47 +7,23 @@ public enum PlayerSide
     BLUE
 }
 
+[RequireComponent(typeof(ChangeUI))]
 public class PlayerMonitor : MonoBehaviour
 {
 
     public PlayerSide playerSide;
-    public GameObject[] changeableUiObjects;
+
+    private ChangeUI changeUIComponent;
 
     void Start()
     {
-
+        changeUIComponent = (ChangeUI)gameObject.GetComponent<ChangeUI>();
     }
 
     public void SetPlayerSide(PlayerSide playerSide)
     {
         this.playerSide = playerSide;
+        changeUIComponent.ChangeUi(playerSide);
     }
-
-    void FixedUpdate()
-    {
-
-        switch (playerSide)
-        {
-            case PlayerSide.BLUE:
-                SetBlueUI();
-                break;
-            case PlayerSide.RED:
-                SetRedUI();
-                break;
-        }
-
-    }
-
-    void SetRedUI()
-    {
-
-    }
-
-    void SetBlueUI()
-    {
-
-    }
-
-
 
 }

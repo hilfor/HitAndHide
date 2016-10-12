@@ -14,6 +14,7 @@ public class PlayerController : Photon.MonoBehaviour
     private string bulletPrefabName;
     void Start()
     {
+        
         bulletPrefabName = bullet.name;
     }
 

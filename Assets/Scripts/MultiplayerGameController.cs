@@ -15,6 +15,8 @@ public class MultiplayerGameController : Photon.PunBehaviour
 
     public GameObject localPlayerPrefab;
 
+    public GameObject changeableUIParent;
+
     [Range(0.0f, 1.0f)]
     public float redBlueRatio;
 
@@ -87,6 +89,7 @@ public class MultiplayerGameController : Photon.PunBehaviour
         Vector3 spawnLocation = getSpawnlocation(playerSide);
         GameObject player = PhotonNetwork.Instantiate(localPlayerPrefab.name, spawnLocation, Quaternion.identity, 0);
 
+        player.GetComponent<ChangeUI>().setChangeableObjects(changeableUIParent.GetComponentsInChildren<IChangeableUI>());
         player.GetComponent<PlayerMonitor>().SetPlayerSide(playerSide);
         standbyCamera.SetActive(false);
     }
@@ -101,7 +104,7 @@ public class MultiplayerGameController : Photon.PunBehaviour
                 playersSideSpawnPoints.Add(spawnPoint);
             }
         }
-        int randomSpawnIndex = Mathf.FloorToInt(Random.Range(0f, playersSideSpawnPoints.Count- 1));
+        int randomSpawnIndex = Mathf.FloorToInt(Random.Range(0f, playersSideSpawnPoints.Count - 1));
         return ((PlayerSpawnPoint)playersSideSpawnPoints[randomSpawnIndex]).transform.position;
     }
 

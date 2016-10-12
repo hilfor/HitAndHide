@@ -3,28 +3,30 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class ChangeUI : MonoBehaviour, IChangeableUI {
+public class ChangeUI : MonoBehaviour, IChangeableUI
+{
 
-    public Text[] changeableTextObjects;
-    public IChangeableUI[] changeableComponentsObjects;
-    
+    //public GameObject[] changeableObjects;
+    //private ArrayList changeableComponentsObjects = new ArrayList();
+    private IChangeableUI[] changeableComponentsObjects;
+
+    void Start()
+    {
+        //changeableComponentsObjects = new ArrayList();
+        //foreach (GameObject changeableObj in changeableObjects)
+        //{
+        //    changeableComponentsObjects.Add(changeableObj);
+        //}
+    }
+
+    public void setChangeableObjects(IChangeableUI[] cComponents)
+    {
+        changeableComponentsObjects = cComponents;
+    }
 
     public void ChangeUi(PlayerSide playerSide)
     {
-        foreach(Text changeableText in changeableComponentsObjects)
-        {
-            switch (playerSide)
-            {
-                case PlayerSide.RED:
-                    changeableText.text = "RED";
-                    break;
-                case PlayerSide.BLUE:
-                    changeableText.text = "BLUE";
-                    break;
-            }
-        }
-
-        foreach(IChangeableUI changeableComponent in changeableComponentsObjects)
+        foreach (IChangeableUI changeableComponent in changeableComponentsObjects)
         {
             changeableComponent.ChangeUi(playerSide);
         }
